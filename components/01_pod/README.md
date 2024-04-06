@@ -106,6 +106,11 @@ Events:
   Normal  Created    6m (x2 over 32m)  kubelet            Created container my-nginx
   Normal  Started    6m (x2 over 32m)  kubelet            Started container my-nginx
 ```
+---
+
+### Diagram
+
+![diagram](/images/components/01_pod/diagram.png)
 
 ---
 
@@ -118,19 +123,33 @@ Delete Pod
 kubectl delete pod my-nginx
 ```
 
+Create yml file name: `nginx.yml`
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-nginx
+spec:
+  containers:
+  - name: my-nginx
+    image: nginx:1.24.0
+    ports:
+    - containerPort: 80
+```
+
 Apply with yml file
 > $ kubectl apply -f <FILE>
 ```
 kubectl apply -f nginx.yml
 ```
 
-Edit file change image to `nginx:1.24.0` and save and `kubectl apply -f nginx.yml` again
+Edit file change image to `nginx:1.25.4` and save and `kubectl apply -f nginx.yml` again
 
 Describe pod again
 ```
 kubectl describe pod my-nginx
 ```
-image tag change to `nginx:1.24.0`
+Image tag will be change to `nginx:1.25.4`
 
 
 
