@@ -40,3 +40,8 @@ try to create cluster for this workshop
 ```shell
 k3d cluster create my-cluster --servers 1 --agents 3
 ```
+
+Setting taint for prevent pod deploy master node (k3d not set by default)
+```
+kubectl taint node k3d-my-cluster-server-0 node-role.kubernetes.io/master:NoSchedule
+```

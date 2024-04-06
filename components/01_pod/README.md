@@ -151,6 +151,14 @@ kubectl describe pod my-nginx
 ```
 Image tag will be change to `nginx:1.25.4`
 
+---
+### Delete
+
+Delete
+```
+kubectl delete -f nginx.yml
+```
+
 
 
 
