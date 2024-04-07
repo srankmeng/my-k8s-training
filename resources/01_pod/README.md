@@ -24,7 +24,15 @@ kubectl api-resources
 
 ---
 
+> [!IMPORTANT]  
+> **Goal:** Create nginx pod in cluster
+
+![diagram](diagram.png)
+
+---
+
 ### Run Pod
+
 Run pod with nginx image
 
 > $ kubectl run <POD_NAME> --image <IMAGES>:<TAG>
@@ -108,12 +116,6 @@ Events:
 ```
 ---
 
-### Diagram
-
-![diagram](/images/components/01_pod/diagram.png)
-
----
-
 ### Run Pod with yml 
 
 Delete Pod
@@ -131,7 +133,7 @@ metadata:
   name: my-nginx
 spec:
   containers:
-  - name: my-nginx
+  - name: nginx
     image: nginx:1.24.0
     ports:
     - containerPort: 80
@@ -158,9 +160,3 @@ Delete
 ```
 kubectl delete -f nginx.yml
 ```
-
-
-
-
-
-

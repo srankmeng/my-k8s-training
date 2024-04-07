@@ -1,5 +1,11 @@
 # Deployment
 
+> [!IMPORTANT]  
+> **Goal:** Create nginx pod with deployment and scaling
+
+![diagram](diagram.png)
+---
+
 ### Apply Deployment
 
 Create `deployment.yml`
@@ -19,7 +25,7 @@ spec:
         app: my-nginx
     spec:
       containers:
-      - name: my-nginx
+      - name: nginx
         image: nginx:1.24.0
         ports:
         - containerPort: 80
@@ -162,6 +168,9 @@ Events:
   Normal  ScalingReplicaSet  2m34s  deployment-controller  Scaled up replica set nginx-deployment-7f75c55cbd to 3 from 1
 ```
 ---
-### Diagram
+### Delete
 
-![diagram](/images/components/02_deployment/diagram.png)
+Delete
+```
+kubectl delete -f deployment.yml
+```
