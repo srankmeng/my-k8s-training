@@ -35,7 +35,7 @@ kubectl api-resources
 
 Run pod with nginx image
 
-> $ kubectl run <POD_NAME> --image <IMAGES>:<TAG>
+> $ kubectl run <POD_NAME> --image <IMAGES_NAME>:<IMAGES_TAG>
 ```
 kubectl run my-nginx --image nginx:1.25.4
 ```

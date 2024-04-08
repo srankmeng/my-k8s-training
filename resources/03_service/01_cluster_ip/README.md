@@ -1,4 +1,4 @@
-# Cluster IP
+# ClusterIP
 
 > [!IMPORTANT]  
 > **Goal:** Create service with **ClusterIP** type and proving Stable IP concept
@@ -19,7 +19,7 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: my-nginx
+      app: my-nginx  # has to match .spec.template.metadata.labels.app
   template:
     metadata:
       labels:
@@ -37,7 +37,7 @@ metadata:
   name: nginx-service
 spec:
   selector:
-    app: my-nginx
+    app: my-nginx # has to match .spec.template.metadata.labels.app on kind: Deployment
   ports:
     - protocol: TCP
       port: 80

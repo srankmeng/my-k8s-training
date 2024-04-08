@@ -25,10 +25,11 @@ kind: Service
 metadata:
   name: nginx-service
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: my-nginx # has to match .spec.template.metadata.labels.app on kind: Deployment
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
+      nodePort: 30080 # range (30000-32767)

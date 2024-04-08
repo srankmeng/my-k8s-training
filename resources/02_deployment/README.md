@@ -18,7 +18,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: my-nginx
+      app: my-nginx # has to match .spec.template.metadata.labels.app
   template:
     metadata:
       labels:
