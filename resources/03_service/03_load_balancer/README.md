@@ -1,12 +1,12 @@
 # LoadBalancer
 
 > [!IMPORTANT]  
-> **Goal:** Create service with **LoadBalancer** type and connecting form external
+> **Goal:** Create service with **LoadBalancer** type and connecting from external
 
 ![diagram](diagram.png)
 ---
 
-### Settup Cluster
+### Setup Cluster
 
 Delete existing cluster
 > $ k3d cluster delete <CLUSTER_NAME>
