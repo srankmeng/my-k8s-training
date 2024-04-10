@@ -1,9 +1,9 @@
-# ConfigMap
+# ConfigMap & Secret
 
 > [!IMPORTANT]  
-> **Goal:** Create Wordpress and apply with **ConfigMap**
+> **Goal:** Create Wordpress and apply with **ConfigMap** and **Secret**
 
-![diagram](diagram.png)
+![diagram](diagram02.png)
 
 ---
 
@@ -160,6 +160,11 @@ spec:
         env:
         - name: WORDPRESS_DB_HOST
           value: database-service
+        - name: WORDPRESS_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: database-config
+              key: db_name
         - name: WORDPRESS_DB_USER
           valueFrom:
             configMapKeyRef:
@@ -170,11 +175,6 @@ spec:
             configMapKeyRef:
               name: database-config
               key: db_password
-        - name: WORDPRESS_DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: database-config
-              key: db_name
         ports:
         - containerPort: 80
 ---
@@ -230,6 +230,106 @@ Apply ingress
 ```
 kubectl apply -f ingress.yml
 ```
+
+Go to http://localhost:8888, should see Wordpress page
+
+---
+
+### Diagram with ConfigMap
+
+![diagram](diagram01.png)
+
+---
+
+### Apply secret
+
+Create `secret.yml`
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-database-secret
+type: Opaque
+data:
+  DB_USER: ZXhhbXBsZXVzZXI=
+  DB_PASSWORD: ZXhhbXBsZXBhc3M=
+```
+> command encode to base64: `$ echo -n <TEXT> | base64 `
+
+Apply Secret
+```
+kubectl apply -f secret.yml
+```
+
+Update `configmap.yml`, remove `db_user` and `db_password`
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: database-config
+data:
+  db_name: exampledb
+  # db_user: exampleuser       <============ Remove
+  # db_password: examplepass   <============ Remove
+```
+
+Apply ConfigMap
+```
+kubectl apply -f configmap.yml
+```
+
+Update `wordpress.yml`
+```
+        ...
+
+        - name: WORDPRESS_DB_USER
+          valueFrom:
+            secretKeyRef:     <============= change to use secretKeyRef
+              name: my-database-secret
+              key: DB_USER
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:     <============= change to use secretKeyRef
+              name: my-database-secret
+              key: DB_PASSWORD
+
+        ...              
+```
+
+Update `mysql.yml`
+```
+        ...
+
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:     <============= change to use secretKeyRef
+              name: my-database-secret
+              key: DB_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:     <============= change to use secretKeyRef
+              name: my-database-secret
+              key: DB_PASSWORD
+
+        ...              
+```
+
+Apply `wordpress.yml`
+```
+kubectl apply -f wordpress.yml
+```
+
+Apply `mysql.yml`
+```
+kubectl apply -f mysql.yml
+```
+
+Get pod
+```
+kubectl get pod
+```
+
+It will be recreate pods
 
 Go to http://localhost:8888, should see Wordpress page
 

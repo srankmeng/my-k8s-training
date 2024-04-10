@@ -4,6 +4,5 @@ metadata:
   name: database-config
 data:
   db_name: exampledb
-  db_user: exampleuser
-  db_password: examplepass
-  
+  # db_user: exampleuser
+  # db_password: examplepass

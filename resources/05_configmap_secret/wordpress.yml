@@ -17,21 +17,21 @@ spec:
         env:
         - name: WORDPRESS_DB_HOST
           value: database-service
-        - name: WORDPRESS_DB_USER
-          valueFrom:
-            configMapKeyRef:
-              name: database-config
-              key: db_user
-        - name: WORDPRESS_DB_PASSWORD
-          valueFrom:
-            configMapKeyRef:
-              name: database-config
-              key: db_password
         - name: WORDPRESS_DB_NAME
           valueFrom:
             configMapKeyRef:
               name: database-config
               key: db_name
+        - name: WORDPRESS_DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: my-database-secret
+              key: DB_USER
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-database-secret
+              key: DB_PASSWORD
         ports:
         - containerPort: 80
 ---

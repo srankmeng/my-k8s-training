@@ -22,14 +22,14 @@ spec:
               key: db_name
         - name: MYSQL_USER
           valueFrom:
-            configMapKeyRef:
-              name: database-config
-              key: db_user
+            secretKeyRef:
+              name: my-database-secret
+              key: DB_USER
         - name: MYSQL_PASSWORD
           valueFrom:
-            configMapKeyRef:
-              name: database-config
-              key: db_password
+            secretKeyRef:
+              name: my-database-secret
+              key: DB_PASSWORD
         - name: MYSQL_RANDOM_ROOT_PASSWORD
           value: '1'
         ports:
