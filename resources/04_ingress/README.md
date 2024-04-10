@@ -265,6 +265,8 @@ Go to: http://localhost:8888/apache
 
 Should see apache page
 
+---
+
 ### Clean cluster
 
 Delete cluster
