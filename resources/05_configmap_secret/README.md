@@ -255,6 +255,7 @@ data:
   DB_PASSWORD: ZXhhbXBsZXBhc3M=
 ```
 > command encode to base64: `$ echo -n <TEXT> | base64 `
+> command decode to base64: `$ echo <TEXT> | base64 -d`
 
 Apply Secret
 ```
