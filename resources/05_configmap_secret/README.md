@@ -338,7 +338,5 @@ Go to http://localhost:8888, should see Wordpress page
 
 ### Clean cluster
 
-Delete cluster
-```
-k3d cluster delete my-cluster
-```
+> [!WARNING]  
+> **Not Clean yet, will be use in next workshop**

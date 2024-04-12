@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+spec:
+  selector:
+    matchLabels:
+      app: my-mysql
+  template:
+    metadata:
+      labels:
+        app: my-mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: database-config
+              key: db_name
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: my-database-secret
+              key: DB_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-database-secret
+              key: DB_PASSWORD
+        - name: MYSQL_RANDOM_ROOT_PASSWORD
+          value: '1'
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: my-mysql-volume
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: my-mysql-volume
+        persistentVolumeClaim:
+          claimName: my-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-service
+spec:
+  selector:
+    app: my-mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
