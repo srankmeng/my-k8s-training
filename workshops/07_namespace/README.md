@@ -4,6 +4,7 @@
 > **Goal:** Create application on 2 namespaces separate by domain name
 
 ![diagram](diagram.png)
+
 ---
 
 ### Setup Cluster
@@ -269,9 +270,30 @@ Try to open browser
 
 ---
 
+### Helping command
+
+View resources all namespace
+```
+kubectl get pod --all-namespaces
+```
+or
+```
+kubectl get pod -A
+```
+
+Setting default namespace
+```
+kubectl config set-context --current --namespace=dev-namespace
+```
+
+View current namespace
+```
+kubectl config get-contexts
+```
+
+---
+
 ### Clean cluster
 
-Delete cluster
-```
-k3d cluster delete my-cluster
-```
+> [!WARNING]  
+> **Not Clean yet, will be use in next workshop**
