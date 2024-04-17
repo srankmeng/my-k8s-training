@@ -55,7 +55,7 @@ kubectl get all
 ```
 or
 ```
-kubectl get all -l 'app.kubernetes.io/instance in (my-wordpress)'
+kubectl get all -l "app.kubernetes.io/instance=my-wordpress"
 ```
 
 :computer: output:

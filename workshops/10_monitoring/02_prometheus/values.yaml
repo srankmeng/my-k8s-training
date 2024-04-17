@@ -1,0 +1,29 @@
+prometheus:
+  server:
+    ingress:
+      enabled: true
+      hosts:
+        - prometheus.example.com
+  serverFiles:
+    alerting_rules.yml:
+      groups:
+      - name: NodeAlerts
+        rules:
+        - alert: InstanceDown
+          expr: up{job="kubernetes-nodes"} == 0
+          for: 15s
+          labels:
+            severity: critical
+          annotations:
+            summary: "Instance [{{ $labels.instance }}] down"
+            description: "[{{ $labels.instance }}] of job {{ $labels.job }} has been down for more than 15 seconds."
+
+        - alert: NodeCPUUsage
+          expr: (100 - (avg(irate(node_cpu_seconds_total{mode="idle"}[2m])) BY (instance) * 100)) > 80
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: '{{$labels.instance}}: High CPU usage detect'
+            description: '{{$labels.instance}}: CPU usage is above 80% (current value is: {{ $value }})'
+            
