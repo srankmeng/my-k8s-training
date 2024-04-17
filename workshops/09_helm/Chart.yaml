@@ -1,0 +1,12 @@
+apiVersion: v2
+name: my-wordpress-helm
+description: A Helm chart for Wordpress Demo
+type: application
+version: 1.0.0
+
+dependencies:
+  - name: "wordpress"
+    alias: myWordpress
+    condition: wordpress.enabled
+    repository: "https://charts.bitnami.com/bitnami"
+    version: "22.1.7"

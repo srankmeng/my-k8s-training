@@ -1,0 +1,9 @@
+myWordpress:
+  enabled: true
+  fullnameOverride: my-wordpress
+  wordpressUsername: admin
+  wordpressPassword: admin
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: true

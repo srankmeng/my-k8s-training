@@ -1,7 +1,7 @@
 # Kubernetes Dashboard
 
 > [!IMPORTANT]  
-> **Goal:** Create Kubernetes Dashboard
+> **Goal:** Running Kubernetes Dashboard
 
 ![dashboard](dashboard.png)
 
@@ -74,7 +74,5 @@ kubectl create token admin-user  --namespace kubernetes-dashboard
 
 ### Clean cluster
 
-Delete cluster
-```
-k3d cluster delete my-cluster
-```
+> [!WARNING]  
+> **Not Clean yet, will be use in next workshop**
