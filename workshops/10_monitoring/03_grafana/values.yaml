@@ -1,0 +1,5 @@
+grafana:
+  ingress:
+    enabled: true
+    hosts:
+      - grafana.example.com

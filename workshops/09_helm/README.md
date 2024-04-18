@@ -109,7 +109,7 @@ Username: user
 
 Password:
 ```
-echo Password: $(kubectl get secret --namespace default my-wordpress -o jsonpath="{.data.wordpress-password}" | base64 -d)
+kubectl get secret --namespace default my-wordpress -o jsonpath="{.data.wordpress-password}" | base64 -d ; echo
 ```
 
 View all manifest

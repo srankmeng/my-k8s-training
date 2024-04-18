@@ -3,6 +3,8 @@
 > [!IMPORTANT]  
 > **Goal:** Running Prometheus and setting alert rules
 
+Ref: https://artifacthub.io/packages/helm/prometheus-community/prometheus
+
 ![dashboard01](dashboard01.png)
 ---
 

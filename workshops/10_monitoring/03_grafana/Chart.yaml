@@ -1,0 +1,12 @@
+apiVersion: v2
+name: my-grafana-helm
+description: A Helm chart for Grafana Demo
+type: application
+version: 1.0.0
+
+dependencies:
+  - name: "grafana"
+    alias: grafana
+    condition: grafana.enabled
+    repository: "https://grafana.github.io/helm-charts"
+    version: "7.3.8"
