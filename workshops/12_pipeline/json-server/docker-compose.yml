@@ -1,0 +1,9 @@
+version: "3"
+services:
+  json_server:
+    image: my_json_server:1.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"

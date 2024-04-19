@@ -2,3 +2,5 @@
 
 Chart.lock
 charts
+jenkins_home
+reports/*

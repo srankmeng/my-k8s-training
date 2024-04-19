@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  postman:
+    image: my_newman:1.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: |
+      run demo.postman_collection.json
+      -e environment.postman_environment.json
+      -r cli,htmlextra --reporter-htmlextra-export reports/report.html
+      --env-var "HOST=host.docker.internal:3000"
+    volumes:
+      - ./reports:/etc/newman/reports
