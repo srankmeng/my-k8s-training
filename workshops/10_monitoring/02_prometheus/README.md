@@ -49,7 +49,7 @@ helm template .
 
 Running prometheus
 ```
-helm upgrade -i demo . -n monitoring --create-namespace
+helm upgrade -i prometheus . -n monitoring --create-namespace
 ```
 
 ---
@@ -68,7 +68,7 @@ prometheus:
 
 Helm upgrade
 ```
-helm upgrade -i demo . -n monitoring --create-namespace
+helm upgrade -i prometheus . -n monitoring --create-namespace
 ```
 
 Config host file for domain
@@ -123,7 +123,7 @@ prometheus:
 
 Helm upgrade
 ```
-helm upgrade -i demo . -n monitoring --create-namespace
+helm upgrade -i prometheus . -n monitoring --create-namespace
 ```
 
 Go to http://prometheus.example.com:8888/alerts for check alert rules

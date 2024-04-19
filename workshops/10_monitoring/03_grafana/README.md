@@ -77,7 +77,7 @@ Should be grafana page
 
 ### Login
 
-Username: user
+Username: admin
 
 Password:
 ```
