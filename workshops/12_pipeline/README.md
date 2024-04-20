@@ -3,6 +3,15 @@
 > [!IMPORTANT]  
 > **Goal:** Create CI/CD pipeline with Jenkins
 
+Steps
+1. Running Jenkins
+2. Add credential & install jenkins plugins
+3. Setup pipeline & create ci
+4. Create cd (Add deployment to pipeline)
+5. Checking results
+
+![diagram](images/diagram.png)
+
 ---
 
 ### Setup Cluster
@@ -20,7 +29,7 @@ k3d cluster create my-cluster --servers 1 --agents 3 --port "8888:80@loadbalance
 
 ---
 
-### Running Jenkins in machine
+### 1. Running Jenkins in machine
 
 Start Jenkins
 ```
@@ -45,7 +54,7 @@ Setting Jenkins URL: `http://localhost:5555/` (by default)
 
 ---
 
-### Add docker hub credential
+### 2.1 Add docker hub credential
 
 Go to http://localhost:5555/manage/credentials/store/system/domain/_/
 
@@ -60,7 +69,7 @@ Click `Add credential` button
 
 ---
 
-### Add kube_config credential
+### 2.2 Add kube_config credential
 
 On the cluster run this command for generate `kubeConfig` file
 ```
@@ -101,13 +110,15 @@ Click `Add credential` button
 
 ---
 
-### Add jenkins plugins for kubernetes 
+### 2.3 Add jenkins plugins for kubernetes 
 
 Manage Jenkins > Plugins > Available plugins > search `kubernetes CLI` > checked and install
 
+![plugins](images/plugins.png)
+
 ---
 
-### Create pipeline
+### 3. Setup pipeline & create ci
 
 On first page click `+ New Item` menu
 
@@ -178,7 +189,7 @@ pipeline {
 
 ---
 
-### Add deployment to pipeline
+### 4.1 Add deployment to pipeline
 
 Add 'Deploy application' stage after `stage('Push Docker Image to Docker Hub')`
 
@@ -211,7 +222,7 @@ kubectl get all
 
 ---
 
-### Polling git for trigger pipelines
+### 4.2 Polling git for trigger pipelines
 Go to the pipeline: Configure > Build Triggers > Poll SCM > input `* * * * *`
 
 ---
