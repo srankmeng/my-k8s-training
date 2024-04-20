@@ -34,29 +34,41 @@ pipeline {
         }
         stage('Run api automate test') {
             steps {
-                sh 'docker compose -f ./workshops/12_pipeline/newman/docker-compose.yml up --build'
+                sh 'docker compose -f ./workshops/12_pipeline/newman/docker-compose.yml build'
+                sh 'docker compose -f ./workshops/12_pipeline/newman/docker-compose.yml up'
             }
         }
         stage('Push Docker Image to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker_hub'
-                , passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
                     sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
                     sh '''docker image tag my_json_server:1.0 $DOCKER_USER/my_json_server:$BUILD_NUMBER
                             docker image push $DOCKER_USER/my_json_server:$BUILD_NUMBER'''
                 }        
             }
         }
+        stage('Deploy application') {
+            steps {
+                withKubeConfig([credentialsId: 'kube_config']) {
+                    sh 'kubectl apply -f ./workshops/12_pipeline/deploy/service.yml'
+                    sh 'kubectl apply -f ./workshops/12_pipeline/deploy/ingress.yml'
+                    withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                        sh 'kubectl set image deployment/json-server-deployment json-server=$DOCKER_USER/my_json_server:$BUILD_NUMBER'
+                    }
+                } 
+            }
+        }
+        stage('Rollout status') {
+            steps {
+                withKubeConfig([credentialsId: 'kube_config']) {
+                    sh 'kubectl rollout status deployment/json-server-deployment --timeout=3m'
+                } 
+            }
+        }  
     }
     post {
         always {
             sh 'docker compose -f ./workshops/12_pipeline/json-server/docker-compose.yml down'
-        }
-        success {
-            script {
-                def currentBuildNumber = env.BUILD_NUMBER
-                build job: 'demo_deploy_pipeline', parameters: [string(name: 'IMAGE_TAG', value: "${currentBuildNumber}")]
-            }
         }
     }
 }

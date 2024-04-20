@@ -20,13 +20,23 @@ RUN curl -LO https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/st
 
 RUN jenkins-plugin-cli \
     --plugins \
+    cloudbees-folder \
+    antisamy-markup-formatter \
     build-timeout \
     credentials-binding \
     timestamper \
     ws-cleanup \
+    ant \
+    gradle \
     workflow-aggregator \
+    pipeline-github-lib \
     github-branch-source \
     pipeline-stage-view \
     git \
     ssh-slaves \
-    matrix-auth
+    matrix-auth \
+    pam-auth \
+    ldap \
+    email-ext \
+    mailer \
+    dark-theme

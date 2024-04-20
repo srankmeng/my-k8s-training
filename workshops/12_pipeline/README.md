@@ -20,46 +20,7 @@ k3d cluster create my-cluster --servers 1 --agents 3 --port "8888:80@loadbalance
 
 ---
 
-### Deploy Jenkins in machine
-
-Create `Dockerfile`
-```
-FROM jenkins/jenkins:lts
-
-USER root
-
-# Reference :: https://docs.docker.com/engine/install/debian/
-RUN apt-get update && apt-get install -y \
-    ca-certificates \
-    curl
-RUN mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
-    chmod a+r /etc/apt/keyrings/docker.asc
-RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
-    apt-get update
-RUN apt-get update -qq && apt-get install -qqy docker-ce docker-ce-cli containerd.io
-
-# Install kubectl
-RUN curl -LO https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl && \
-    chmod +x ./kubectl && \
-    mv ./kubectl /usr/local/bin/kubectl | bash
-```
-
-Create `docker-compose.yml`
-```
-version: '3.7'
-services:
-  jenkins:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 5555:8080
-      - 50000:50000
-    volumes:
-      - ./jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
-```
+### Running Jenkins in machine
 
 Start Jenkins
 ```
@@ -76,7 +37,7 @@ Get your password by replace `<CONTAINER_ID>` with output form `docker ps | grep
 docker exec <CONTAINER_ID> cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 
-Choosing install suggested plugin and waiting 5 minutes
+Choosing install suggested plugin and waiting a moment
 
 Filling username, password, full name and email 
 
@@ -99,15 +60,63 @@ Click `Add credential` button
 
 ---
 
-### Setup CI pipeline
+### Add kube_config credential
+
+On the cluster run this command for generate `kubeConfig` file
+```
+kubectl config view --minify --raw > kubeConfig
+```
+
+Modify `kubeConfig` file change `0.0.0.0` to `host.docker.internal`
+```
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tL ...
+    server: https://host.docker.internal:55720     <=============== Update here 
+  name: k3d-my-cluster
+contexts:
+- context:
+    cluster: k3d-my-cluster
+    user: admin@k3d-my-cluster
+  name: k3d-my-cluster
+current-context: k3d-my-cluster
+kind: Config
+preferences: {}
+users:
+- name: admin@k3d-my-cluster
+  user:
+    client-certificate-data: LS0tL ... 
+```
+
+Go to http://localhost:5555/manage/credentials/store/system/domain/_/
+
+Click `Add credential` button
+
+- Kind: Secret file
+- Scope: Global
+- File: \<browse your `kubeConfig` file \>
+- ID: kube_config
+- Description: \<blank\>
+
+---
+
+### Add jenkins plugins for kubernetes 
+
+Manage Jenkins > Plugins > Available plugins > search `kubernetes CLI` > checked and install
+
+---
+
+### Create pipeline
 
 On first page click `+ New Item` menu
 
-Enter pipeline name
+Enter pipeline name for example `demo_pipeline`
 
 Click Pipeline option and submit 
 
 then input code to pipeline script
+
 ```
 pipeline {
     agent any
@@ -145,19 +154,19 @@ pipeline {
         }
         stage('Run api automate test') {
             steps {
-                sh 'docker compose -f ./workshops/12_pipeline/newman/docker-compose.yml up --build'
+                sh 'docker compose -f ./workshops/12_pipeline/newman/docker-compose.yml build'
+                sh 'docker compose -f ./workshops/12_pipeline/newman/docker-compose.yml up'
             }
         }
         stage('Push Docker Image to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker_hub'
-                , passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
                     sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
                     sh '''docker image tag my_json_server:1.0 $DOCKER_USER/my_json_server:$BUILD_NUMBER
-                          docker image push $DOCKER_USER/my_json_server:$BUILD_NUMBER'''
+                            docker image push $DOCKER_USER/my_json_server:$BUILD_NUMBER'''
                 }        
             }
-        }
+        }     
     }
     post {
         always {
@@ -166,6 +175,50 @@ pipeline {
     }
 }
 ```
+
+---
+
+### Add deployment to pipeline
+
+Add 'Deploy application' stage after `stage('Push Docker Image to Docker Hub')`
+
+```
+        stage('Deploy application') {
+            steps {
+                withKubeConfig([credentialsId: 'kube_config']) {
+                    sh 'kubectl apply -f ./workshops/12_pipeline/deploy/service.yml'
+                    sh 'kubectl apply -f ./workshops/12_pipeline/deploy/ingress.yml'
+                    withCredentials([usernamePassword(credentialsId: 'docker_hub', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                        sh 'kubectl set image deployment/json-server-deployment json-server=$DOCKER_USER/my_json_server:$BUILD_NUMBER'
+                    }
+                } 
+            }
+        }
+        stage('Rollout status') {
+            steps {
+                withKubeConfig([credentialsId: 'kube_config']) {
+                    sh 'kubectl rollout status deployment/json-server-deployment --timeout=3m'
+                } 
+            }
+        }
+```
+Go to `http://localhost:8888`
+
+Check resources
+```
+kubectl get all
+```
+
+---
+
+### Polling git for trigger pipelines
+Go to the pipeline: Configure > Build Triggers > Poll SCM > input `* * * * *`
+
+---
+
+### Blue Ocean - plugin
+
+Manage Jenkins > Plugins > Available plugins > search `blue ocean` > checked and install
 
 ---
 
