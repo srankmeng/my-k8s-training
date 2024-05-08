@@ -88,8 +88,8 @@ kubectl get secret grafana -n monitoring -o jsonpath="{.data.admin-password}" | 
 
 ### Setup Grafana
 
-Add datasources choose Prometheus and input prometheus server url as prometheus service's ip
-> You can input Prometheus url if on network, but this case Grafana don't know `prometheus.example.url` so use prometheus service's ip instead
+Add datasources choose Prometheus and input prometheus server url as prometheus service's ip or input `http://prometheus-server`
+> You can input Prometheus url if on network, but this case Grafana don't know `prometheus.example.url`
 ```
 kubectl get service -n monitoring
 ```
