@@ -98,7 +98,7 @@ Copy `prometheus-server` ip and fill to prometheus server url input, click save 
 
 Add Dashboard 
 - import dashboard
-- input dashboard id for examples: `6417`, `315`
+- input dashboard id for examples: `315`, `6417`
 - click load button
 - select prometheus data source
 - click import

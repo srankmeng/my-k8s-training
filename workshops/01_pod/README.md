@@ -31,6 +31,14 @@ kubectl api-resources
 
 ---
 
+### Setup Cluster
+
+Create new cluster
+```
+k3d cluster create my-cluster --servers 1 --agents 3 --port "8888:80@loadbalancer" --port "8889:443@loadbalancer"
+```
+---
+
 ### Run Pod
 
 Run pod with nginx image
