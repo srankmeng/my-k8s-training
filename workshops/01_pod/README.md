@@ -14,7 +14,7 @@ kubectl get node
 
 Get node more information:
 ```
-kubectl get node - wide
+kubectl get node -o wide
 ```
 
 View all resources:
@@ -36,6 +36,11 @@ kubectl api-resources
 Create new cluster
 ```
 k3d cluster create my-cluster --servers 1 --agents 3 --port "8888:80@loadbalancer" --port "8889:443@loadbalancer"
+```
+
+Setting taint for prevent pod deploy master node (k3d not set by default)
+```
+kubectl taint node k3d-my-cluster-server-0 node-role.kubernetes.io/master:NoSchedule
 ```
 ---
 

@@ -22,7 +22,7 @@ kind: PersistentVolume
 metadata:
   name: my-pv
 spec:
-  storageClassName: demo
+  storageClassName: manual
   persistentVolumeReclaimPolicy: Retain
   capacity:
     storage: 5Gi
@@ -53,7 +53,7 @@ kubectl get pv
 :computer: output:
 ```
 NAME    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
-my-pv   5Gi        RWO            Retain           Available           demo                    7s
+my-pv   5Gi        RWO            Retain           Available           manual                    7s
 ```
 STATUS is Available and CLAIM is blank
 
@@ -68,7 +68,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: my-pvc
 spec:
-  storageClassName: demo
+  storageClassName: manual
   accessModes:
     - ReadWriteOnce
   resources:
@@ -89,7 +89,7 @@ kubectl get pvc
 :computer: output:
 ```
 NAME     STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-my-pvc   Bound    my-pv    5Gi        RWO            demo           4s
+my-pvc   Bound    my-pv    5Gi        RWO            manual           4s
 ```
 
 Get PV
@@ -100,7 +100,7 @@ kubectl get pv
 :computer: output:
 ```
 NAME    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM            STORAGECLASS   REASON   AGE
-my-pv   5Gi        RWO            Retain           Bound    default/my-pvc   demo                    3m10s
+my-pv   5Gi        RWO            Retain           Bound    default/my-pvc   manual                    3m10s
 ```
 
 STATUS is Bound and CLAIM is my-pvc

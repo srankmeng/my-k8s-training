@@ -3,7 +3,7 @@ kind: PersistentVolume
 metadata:
   name: my-pv
 spec:
-  storageClassName: demo
+  storageClassName: manual
   persistentVolumeReclaimPolicy: Retain
   capacity:
     storage: 5Gi
