@@ -20,7 +20,7 @@ k3d cluster create my-cluster --servers 1 --agents 3 --port "8888:80@loadbalance
 ```
 ---
 
-### Create NodePort service type
+### Create LoadBalancer service type
 
 Create `service.yml`
 ```

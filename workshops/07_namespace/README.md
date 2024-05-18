@@ -75,7 +75,7 @@ metadata:
   labels:
     app: my-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: my-web # has to match .spec.template.metadata.labels.app
@@ -229,7 +229,7 @@ metadata:
   labels:
     app: my-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: my-web # has to match .spec.template.metadata.labels.app
@@ -283,7 +283,7 @@ kubectl get pod -A
 
 Setting default namespace
 ```
-kubectl config set-context --current --namespace=dev-namespace
+kubectl config set-context --current --namespace=dev-environment
 ```
 
 View current namespace

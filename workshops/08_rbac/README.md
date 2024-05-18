@@ -154,6 +154,7 @@ kubectl get rolebinding -n dev-environment
 Now you setup user, role, and binding already done, go to next step
 
 ---
+![context](context.png)
 ---
 
 ## Update Context with KubeConfig

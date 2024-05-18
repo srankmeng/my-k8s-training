@@ -5,7 +5,7 @@ metadata:
   labels:
     app: my-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: my-web # has to match .spec.template.metadata.labels.app
