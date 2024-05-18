@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-nginx-health
+  template:
+    metadata:
+      labels:
+        app: my-nginx-health
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.24.0
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /live
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 3
