@@ -5,7 +5,7 @@
 
 Ref: https://artifacthub.io/packages/helm/grafana/grafana
 
-![dashboard](dashboard.png)
+![dashboard](images/dashboard.png)
 ---
 
 ### Setup Cluster
@@ -77,7 +77,7 @@ Should be grafana page
 
 ### Login
 
-Username: admin
+Username: **admin**
 
 Password:
 ```
@@ -88,20 +88,36 @@ kubectl get secret grafana -n monitoring -o jsonpath="{.data.admin-password}" | 
 
 ### Setup Grafana
 
-Add datasources choose Prometheus and input prometheus server url as prometheus service's ip or input `http://prometheus-server`
-> You can input Prometheus url if on network, but this case Grafana don't know `prometheus.example.url`
+#### Add datasources
+![setup01](images/setup01.png)
+
+Choose Prometheus
+![setup02](images/setup02.png)
+
+Input prometheus server url as prometheus service's name
 ```
 kubectl get service -n monitoring
 ```
 
-Copy `prometheus-server` ip and fill to prometheus server url input, click save & test button
+So input `http://prometheus-server`
+![setup03](images/setup03.png)
 
-Add Dashboard 
-- import dashboard
-- input dashboard id for examples: `315`, `6417`
-- click load button
-- select prometheus data source
-- click import
+
+#### Add Dashboard 
+
+![setup04](images/setup04.png)
+
+import dashboard
+![setup05](images/setup05.png)
+
+Choose template
+![setup06](images/setup06.png)
+
+Input dashboard id for examples: `315`, `6417`, then click load button
+![setup07](images/setup07.png)
+
+Select prometheus data source and click import button
+![setup08](images/setup08.png)
 
 Should see the dashboard
 
