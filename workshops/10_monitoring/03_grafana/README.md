@@ -121,6 +121,10 @@ Select prometheus data source and click import button
 
 Should see the dashboard
 
+Now diagram is like this:
+
+![diagram01](images/diagram01.png)
+
 ---
 
 ### Clean cluster

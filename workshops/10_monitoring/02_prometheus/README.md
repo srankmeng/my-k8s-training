@@ -5,7 +5,7 @@
 
 Ref: https://artifacthub.io/packages/helm/prometheus-community/prometheus
 
-![dashboard01](dashboard01.png)
+![dashboard01](images/dashboard01.png)
 ---
 
 ### Setup Cluster
@@ -86,6 +86,10 @@ Go to http://prometheus.example.com:8888/
 
 Should be prometheus page
 
+Now diagram is like this:
+
+![diagram01](images/diagram01.png)
+
 ---
 
 ### Setting Alert rules
@@ -128,7 +132,7 @@ helm upgrade -i prometheus . -n monitoring --create-namespace
 
 Go to http://prometheus.example.com:8888/alerts for check alert rules
 
-![dashboard02](dashboard02.png)
+![dashboard02](images/dashboard02.png)
 
 Try to add new node
 ```
@@ -146,6 +150,10 @@ kubectl get node
 ```
 
 Go to http://prometheus.example.com:8888/alerts and check again
+
+Now diagram is like this:
+
+![diagram02](images/diagram02.png)
 
 ---
 
