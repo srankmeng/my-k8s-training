@@ -46,16 +46,16 @@ Create `namespace.yml`
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: dev-environment
+  name: nginx-domain
   labels:
-    name: dev-environment
+    name: nginx-domain
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: uat-environment
+  name: apache-domain
   labels:
-    name: uat-environment
+    name: apache-domain
 ```
 
 Apply namespace
@@ -64,7 +64,7 @@ kubectl apply -f namespace.yml
 ```
 ---
 
-### Create nginx on namespace dev-environment
+### Create nginx on namespace nginx-domain
 
 Create `service_nginx.yml`
 ```
@@ -104,33 +104,33 @@ spec:
       targetPort: 80
 ```
 
-Apply nginx with dev-environment namespace 
+Apply nginx with nginx-domain namespace 
 ```
-kubectl apply -f service_nginx.yml --namespace dev-environment
-```
-
-Get all with dev-environment namespace
-```
-kubectl get all --namespace dev-environment
+kubectl apply -f service_nginx.yml --namespace nginx-domain
 ```
 
-Check resource in uat-environment
+Get all with nginx-domain namespace
 ```
-kubectl get all --namespace uat-environment
+kubectl get all --namespace nginx-domain
+```
+
+Check resource in apache-domain
+```
+kubectl get all --namespace apache-domain
 ```
 Should be have not any resources
 
 ---
 
-### Create nginx on namespace uat-environment
-Apply nginx with uat-environment namespace 
+### Create nginx on namespace apache-domain
+Apply nginx with apache-domain namespace 
 ```
-kubectl apply -f service_nginx.yml --namespace uat-environment
+kubectl apply -f service_nginx.yml --namespace apache-domain
 ```
 
-Check resource on uat-environment
+Check resource on apache-domain
 ```
-kubectl get all --namespace uat-environment
+kubectl get all --namespace apache-domain
 ```
 
 ---
@@ -143,10 +143,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: my-ingress
-  namespace: dev-environment
+  namespace: nginx-domain
 spec:
   rules:
-  - host: dev.example.com
+  - host: nginx.example.com
     http:
       paths:
       - path: /
@@ -161,10 +161,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: my-ingress
-  namespace: uat-environment
+  namespace: apache-domain
 spec:
   rules:
-  - host: uat.example.com
+  - host: apache.example.com
     http:
       paths:
       - path: /
@@ -183,10 +183,10 @@ kubectl apply -f ingress.yml
 
 Check ingress
 ```
-kubectl get ingress -n dev-environment
+kubectl get ingress -n nginx-domain
 ```
 ```
-kubectl get ingress -n uat-environment
+kubectl get ingress -n apache-domain
 ```
 
 ---
@@ -200,8 +200,8 @@ sudo nano /etc/hosts
 
 ```
 ### add here
-127.0.0.1    dev.example.com
-127.0.0.1    uat.example.com
+127.0.0.1    nginx.example.com
+127.0.0.1    apache.example.com
 ```
 
 #### windows
@@ -209,17 +209,17 @@ locate to: `C:\Windows\System32\drivers\etc`
 
 ```
 ### add here
-127.0.0.1    dev.example.com
-127.0.0.1    uat.example.com
+127.0.0.1    nginx.example.com
+127.0.0.1    apache.example.com
 ```
 
 Try to open browser
 
-http://dev.example.com:8888 and http://uat.example.com:8888
+http://nginx.example.com:8888 and http://apache.example.com:8888
 
 ---
 
-### Change my-web pod nginx to apache on namespace uat-environment
+### Change my-web pod nginx to apache on namespace apache-domain
 Create `service_apache.yml`
 ```
 apiVersion: apps/v1
@@ -258,15 +258,15 @@ spec:
       targetPort: 80
 ```
 
-Apply apache on uat-environment namespace 
+Apply apache on apache-domain namespace 
 ```
-kubectl apply -f service_apache.yml --namespace uat-environment
+kubectl apply -f service_apache.yml --namespace apache-domain
 ```
 
 Try to open browser
 
-- http://dev.example.com:8888 open nginx
-- http://uat.example.com:8888 open apache
+- http://nginx.example.com:8888 open nginx
+- http://apache.example.com:8888 open apache
 
 ---
 
@@ -283,7 +283,7 @@ kubectl get pod -A
 
 Setting default namespace
 ```
-kubectl config set-context --current --namespace=dev-environment
+kubectl config set-context --current --namespace=nginx-domain
 ```
 
 View current namespace

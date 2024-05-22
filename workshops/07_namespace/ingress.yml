@@ -2,10 +2,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: my-ingress
-  namespace: dev-environment
+  namespace: nginx-domain
 spec:
   rules:
-  - host: dev.example.com
+  - host: nginx.example.com
     http:
       paths:
       - path: /
@@ -20,10 +20,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: my-ingress
-  namespace: uat-environment
+  namespace: apache-domain
 spec:
   rules:
-  - host: uat.example.com
+  - host: apache.example.com
     http:
       paths:
       - path: /

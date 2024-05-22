@@ -4,7 +4,7 @@
 > **Goal:** 
 > - Create Viewer account
 > - Viewer account can list all namespaces
-> - Viewer account can view all resources on dev-environment namespaces only
+> - Viewer account can view all resources on nginx-domain namespaces only
 
 ---
 
@@ -102,15 +102,15 @@ kubectl get clusterrolebinding
 
 ---
 
-### Create Role for view all resources on dev-environment namespaces only
+### Create Role for view all resources on nginx-domain namespaces only
 
-Create `view_only_dev_ns_role.yml`
+Create `view_only_nginx_role.yml`
 ```
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: view-only-role
-  namespace: dev-environment
+  namespace: nginx-domain
 rules:
 - apiGroups:
   - ""
@@ -126,7 +126,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: view-only-rolebinding
-  namespace: dev-environment
+  namespace: nginx-domain
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -139,16 +139,16 @@ subjects:
 
 Apply Cluster Role for list all namespaces
 ```
-kubectl apply -f view_only_dev_ns_role.yml
+kubectl apply -f view_only_nginx_role.yml
 ```
 
 Get Role & Role binding
 ```
-kubectl get role -n dev-environment
+kubectl get role -n nginx-domain
 ```
 and
 ```
-kubectl get rolebinding -n dev-environment
+kubectl get rolebinding -n nginx-domain
 ```
 
 Now you setup user, role, and binding already done, go to next step
@@ -298,7 +298,7 @@ kubectl config --kubeconfig=demo-config view --minify
 
 ---
 
-### Checking list namespaces and view resources on dev-environment namespace
+### Checking list namespaces and view resources on nginx-domain namespace
 
 View all namespaces
 ```
@@ -312,13 +312,13 @@ default           Active   23h
 kube-system       Active   23h
 kube-public       Active   23h
 kube-node-lease   Active   23h
-dev-environment   Active   23h
-uat-environment   Active   23h
+nginx-domain   Active   23h
+apache-domain   Active   23h
 ```
 
-View resources on dev-environment namespace
+View resources on nginx-domain namespace
 ```
-kubectl --kubeconfig=demo-config get pod -n dev-environment
+kubectl --kubeconfig=demo-config get pod -n nginx-domain
 ```
 
 :computer: output:
@@ -329,19 +329,19 @@ my-deployment-6db86d5f4b-bvkps      1/1     Running   0          22h
 my-deployment-6db86d5f4b-pv5cj      1/1     Running   0          22h
 ```
 
-View resources on uat-environment namespace
+View resources on apache-domain namespace
 ```
-kubectl --kubeconfig=demo-config get pod -n uat-environment
+kubectl --kubeconfig=demo-config get pod -n apache-domain
 ```
 
 :computer: output:
 ```
-Error from server (Forbidden): pods is forbidden: User "system:serviceaccount:default:viewer" cannot list resource "pods" in API group "" in the namespace "uat-environment"
+Error from server (Forbidden): pods is forbidden: User "system:serviceaccount:default:viewer" cannot list resource "pods" in API group "" in the namespace "apache-domain"
 ```
 
-Modified resources on dev-environment namespace
+Modified resources on nginx-domain namespace
 ```
-kubectl --kubeconfig=demo-config edit deployment my-deployment -n dev-environment
+kubectl --kubeconfig=demo-config edit deployment my-deployment -n nginx-domain
 ```
 ```
 ...
@@ -357,7 +357,7 @@ spec:
 
 :computer: output:
 ```
-error: deployments.apps "my-deployment" could not be patched: deployments.apps "my-deployment" is forbidden: User "system:serviceaccount:default:viewer" cannot patch resource "deployments" in API group "apps" in the namespace "dev-environment"
+error: deployments.apps "my-deployment" could not be patched: deployments.apps "my-deployment" is forbidden: User "system:serviceaccount:default:viewer" cannot patch resource "deployments" in API group "apps" in the namespace "nginx-domain"
 ```
 Cannot update deployment
 

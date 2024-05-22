@@ -80,19 +80,6 @@ Go to: http://localhost:30080
 Should see nginx page
 
 ---
-### Remove all pod
-
-Delete all pods
-> $ kubectl delete pod <POD_1> <POD_2> <POD_3>
-```
-kubectl delete pod nginx-deployment-799d5dcc86-6lxsd nginx-deployment-799d5dcc86-q4dd8 nginx-deployment-799d5dcc86-tz7fx
-```
-
-Go to: http://localhost:30080
-
-Should still see nginx page
-
----
 
 ### Clean cluster
 
