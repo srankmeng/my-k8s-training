@@ -156,7 +156,7 @@ spec:
     spec:
       containers:
       - name: wordpress
-        image: wordpress:6.5.0-php8.1
+        image: wordpress:6.5.0-php8.1-fpm-alpine
         env:
         - name: WORDPRESS_DB_HOST
           value: database-service
