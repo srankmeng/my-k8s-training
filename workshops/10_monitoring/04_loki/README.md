@@ -5,7 +5,7 @@
 
 Ref: https://artifacthub.io/packages/helm/grafana/loki-stack
 
-![dashboard](dashboard.png)
+![dashboard](images/dashboard.png)
 ---
 
 ### Setup Cluster
@@ -14,7 +14,7 @@ Use result cluster from `10_monitoring/03_grafana` workshop
 
 ---
 
-### Deploying Grafana
+### Deploying Loki
 
 Add repository
 ```
@@ -73,9 +73,31 @@ kubectl get all -n monitoring
 
 ### Setup data sources on Grafana
 
-Open Grafana then add datasources choose Loki and input Loki server url as Loki service's ip or input `http://loki:3100`, Click save button
+Open Grafana then add datasources
+![setup01](images/setup01.png)
 
-Go to sidebar > Explore > Choose Loki > Query logs
+choose Loki
+![setup02](images/setup02.png)
+
+Input loki server url as loki service's name
+```
+kubectl get service -n monitoring
+```
+So input `http://loki:3100`, Click save&test button
+![setup03](images/setup03.png)
+
+If all work, will be like this
+![setup04](images/setup04.png)
+
+
+Go to sidebar > Explore
+![setup05](images/setup05.png)
+
+Choose Loki
+![setup06](images/setup06.png)
+
+Choose label filter and run query
+![setup07](images/setup07.png)
 
 > [!NOTE]  
 > Loki has not display defaut namespace
