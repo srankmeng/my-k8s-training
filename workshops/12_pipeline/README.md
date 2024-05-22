@@ -49,8 +49,11 @@ docker exec <CONTAINER_ID> cat /var/jenkins_home/secrets/initialAdminPassword
 Choosing install suggested plugin and waiting a moment
 
 Filling username, password, full name and email 
+![setup01](images/setup01.png)
 
 Setting Jenkins URL: `http://localhost:5555/` (by default)
+
+Then start jenkins
 
 ---
 
@@ -59,6 +62,7 @@ Setting Jenkins URL: `http://localhost:5555/` (by default)
 Go to http://localhost:5555/manage/credentials/store/system/domain/_/
 
 Click `Add credential` button
+![setup02](images/setup02.png)
 
 - Kind: Username with password
 - Scope: Global
@@ -66,6 +70,8 @@ Click `Add credential` button
 - Password: `YOUR_DOCKER_HUB_PASSWORD`
 - ID: docker_hub
 - Description: docker hub
+
+![setup03](images/setup03.png)
 
 ---
 
@@ -108,13 +114,15 @@ Click `Add credential` button
 - ID: kube_config
 - Description: \<blank\>
 
+![setup04](images/setup04.png)
+
 ---
 
 ### 2.3 Add jenkins plugins for kubernetes 
 
 Manage Jenkins > Plugins > Available plugins > search `kubernetes CLI` > checked and install
 
-![plugins](images/plugins.png)
+![setup05](images/setup05.png)
 
 ---
 
