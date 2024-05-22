@@ -126,6 +126,13 @@ Delete cluster
 k3d cluster delete my-cluster
 ```
 
+or 
+
+Uninstall 
+```
+helm uninstall my-wordpress
+```
+
 Create new cluster with expose loadbalancer port
 ```
 k3d cluster create my-cluster --servers 1 --agents 3 --port "8888:80@loadbalancer" --port "8889:443@loadbalancer"
@@ -268,6 +275,12 @@ Go to http://localhost:8888/ or http://localhost:8888/wp-admin/ and try to login
 ---
 
 ### HELM Rollback
+
+HELM history
+> $ helm history <RELEASE_NAME>
+```
+helm history demo -n wordpress-demo
+```
 
 HELM Rollback
 > $ helm rollback <RELEASE_NAME> <REVISION_NUMBER>
