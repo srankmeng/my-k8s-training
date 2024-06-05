@@ -34,7 +34,7 @@ dependencies:
     alias: grafana
     condition: grafana.enabled
     repository: "https://grafana.github.io/helm-charts"
-    version: "7.3.8"
+    version: "8.0.0"
 ```
 
 Update dependencies
