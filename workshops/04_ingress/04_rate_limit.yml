@@ -12,18 +12,26 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: test-ratelimit
+  name: apache-ratelimit
 spec:
   rateLimit:
     average: 100
-    burst: 500
+    period: 10s
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: nginx-ratelimit
+spec:
+  rateLimit:
+    average: 10
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: my-ingress
+  name: nginx-ingress
   annotations:
-    traefik.ingress.kubernetes.io/router.middlewares: default-my-ingress-middleware@kubernetescrd ,default-test-ratelimit@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: default-my-ingress-middleware@kubernetescrd, default-nginx-ratelimit@kubernetescrd
 spec:
   rules:
     - http:
@@ -35,6 +43,17 @@ spec:
                 name: nginx-service
                 port:
                   number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: apache-ingress
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: default-my-ingress-middleware@kubernetescrd ,default-apache-ratelimit@kubernetescrd
+spec:
+  rules:
+    - http:
+        paths:
           - path: /apache
             pathType: Prefix
             backend:
